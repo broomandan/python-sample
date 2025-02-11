@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block title %}Cryptocurrency Details{% endblock %}
+
+{% block content %}
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 0;
+    }
+    .container {
+        width: 80%;
+        margin: 20px auto;
+        background: #fff;
+        padding: 20px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    h1 {
+        color: #333;
+        border-bottom: 2px solid #333;
+        padding-bottom: 10px;
+    }
+    p {
+        font-size: 18px;
+        line-height: 1.6;
+    }
+    .back-link {
+        display: inline-block;
+        margin-top: 20px;
+        padding: 10px 15px;
+        background: lightblue;
+        color: #fff;
+        text-decoration: none;
+        border-radius: 5px;
+    }
+    .back-link:hover {
+        background: lightgreen;
+    }
+</style>
+
+<div class="container">
+    
+
+    {% if item %}
+        <h1>{{ item.name }} Details</h1>
+        <p><b>ID:</b> {{ item.id }}</p>
+        <p><b>Symbol:</b> {{ item.symbol }}</p>
+        <p><b>Name:</b> {{ item.name }}</p>
+        <p><b>Market Cap Rank:</b> {{ item.market_cap_rank }}</p>
+    {% else %}
+        <p>Item details not found.</p>
+    {% endif %}
+    <a href="/itemlist" class="back-link">Back to Item List</a>
+</div>
+
+{% endblock %}

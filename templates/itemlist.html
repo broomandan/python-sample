@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block title %}Item List{% endblock %}
+
+{% block content %}
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f7f7f7;
+        color: #333;
+    }
+
+    h1 {
+        color: #6c757d;
+        text-align: center;
+        margin-top: 20px;
+    }
+
+    ul {
+        list-style-type: none;
+        padding: 0;
+        max-width: 600px;
+        margin: 20px auto;
+        background-color: #ffffff;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    li {
+        padding: 15px;
+        border-bottom: 1px solid #e9ecef;
+    }
+
+    li:last-child {
+        border-bottom: none;
+    }
+
+    a {
+        text-decoration: none;
+        color: #007bff;
+        font-weight: bold;
+    }
+
+    a:hover {
+        color: #0056b3;
+    }
+
+    p {
+        text-align: center;
+        color: #6c757d;
+    }
+</style>
+
+<h1>Cryptocurrency Prices</h1>
+
+{% if items %}
+<ul>
+    {% for crypto, price_info in items.items() %}
+    <li><a href="/itemdetails/{{ crypto }}">{{ crypto }}: ${{ price_info['usd'] }}</a></li>
+    {% endfor %}
+</ul>
+{% else %}
+<p>No items found.</p>
+{% endif %}
+
+{% endblock %}
