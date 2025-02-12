@@ -56,7 +56,7 @@
 {% if items %}
 <ul>
     {% for crypto, price_info in items.items() %}
-    <li><a href="/itemdetails/{{ crypto }}">{{ crypto }}: ${{ price_info['usd'] }}</a></li>
+    <li><a href="/coins/{{ crypto }}">{{ crypto }}: ${{ price_info['usd'] }}</a></li>
     {% endfor %}
 </ul>
 {% else %}
