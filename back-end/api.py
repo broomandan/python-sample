@@ -4,7 +4,7 @@ from fastapi import FastAPI, HTTPException, Query
 from fastapi.responses import HTMLResponse
 import requests
 
-app = FastAPI(title="Crypto pricing API using FastAPI", description="Crypto pricing API, returns list of crypto assets, returns detail of an asset")
+api = FastAPI(title="Crypto pricing API using FastAPI", description="Crypto pricing API, returns list of crypto assets, returns detail of an asset")
 
 CRYPTO_API_BASE_URL = "https://api.coingecko.com/api/v3/"
 CRYPTO_API_LIST_BASE_URL = f"{CRYPTO_API_BASE_URL}simple/price?ids=bitcoin,litecoin,ethereum,ripple&vs_currencies=usd"
@@ -25,8 +25,11 @@ class PriceModel(BaseModel):
     litecoin: CryptoPrice
     ripple: CryptoPrice
 
+@api.get("/")
+async def read_root():
+    return {"message": "API is up and running"}
 
-@app.get("/coin_prices", response_model=PriceModel, summary="Get a list of coins")
+@api.get("/coin_prices", response_model=PriceModel, summary="Get a list of coins")
 async def get_coin_prices(
     skip: int = Query(0, description="Number of coins to skip"),
     limit: int = Query(10, description="Maximum number of coins to return"),
@@ -46,7 +49,7 @@ async def get_coin_prices(
         print(f'Error fetching crypto prices: {error}')
         return None
 
-@app.get("/coins/{coinid}", response_model=CryptoModel, summary="Get details of a specific coin")
+@api.get("/coins/{coinid}", response_model=CryptoModel, summary="Get details of a specific coin")
 async def get_coin_details(coinid: str):
     try:
         print(f"{CRYPTO_API_DETAIL_BASE_URL}{coinid}")
@@ -66,6 +69,11 @@ async def get_coin_details(coinid: str):
     raise HTTPException(status_code=404, detail="Item not found")  # Raise 404 if not found
 
 
-@app.exception_handler(404)
+@api.exception_handler(404)
 async def not_found(request, exc):
     return HTMLResponse(content="Page not found.", status_code=404)
+
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(api, host="127.0.0.1", port=8080, reload=True)

@@ -31,6 +31,10 @@ def fetch_coin_details(coinid):
         print(f"Error fetching data: {e}")
         return None  # Or handle the error differently
 
+@app.get("/")
+def read_root():
+    return ("<H1>Site is up and running</H1>")
+
 @app.route('/coins')
 def itemlist():
     items =fetch_coin_prices()
