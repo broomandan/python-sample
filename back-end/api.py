@@ -2,13 +2,11 @@ from typing import Optional
 from pydantic import BaseModel
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.responses import HTMLResponse
+from config import CRYPTO_API_LIST_BASE_URL, CRYPTO_API_DETAIL_BASE_URL
+
 import requests
 
 api = FastAPI(title="Crypto pricing API using FastAPI", description="Crypto pricing API, returns list of crypto assets, returns detail of an asset")
-
-CRYPTO_API_BASE_URL = "https://api.coingecko.com/api/v3/"
-CRYPTO_API_LIST_BASE_URL = f"{CRYPTO_API_BASE_URL}simple/price?ids=bitcoin,litecoin,ethereum,ripple&vs_currencies=usd"
-CRYPTO_API_DETAIL_BASE_URL = f"{CRYPTO_API_BASE_URL}coins/"
 
 class CryptoModel(BaseModel):
      Id : str
