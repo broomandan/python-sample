@@ -1,3 +1,7 @@
 {
-    "livePreview.defaultPreviewPath": "/templates/errors.html"
+    "livePreview.defaultPreviewPath": "/templates/errors.html",
+    "python.analysis.extraPaths": [
+        "./back-end",
+        "./back-end"
+    ]
 }

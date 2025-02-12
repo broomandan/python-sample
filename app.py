@@ -1,13 +1,10 @@
 from flask import Flask, render_template
 import requests
+from config import CRYPTO_API_LIST_BASE_URL, CRYPTO_API_DETAIL_BASE_URL
 
 app = Flask(__name__)
 
-CRYPTO_API_BASE_URL = "http://127.0.0.1:8000"
-CRYPTO_API_LIST_BASE_URL = f"{CRYPTO_API_BASE_URL}/coin_prices"
-CRYPTO_API_DETAIL_BASE_URL = f"{CRYPTO_API_BASE_URL}/coins"
-
-def fetch_prices(params = {
+def fetch_coin_prices(params = {
     'ids': 'bitcoin,litecoin,ethereum,ripple',
     'vs_currencies': 'usd'
 }):
@@ -34,14 +31,13 @@ def fetch_coin_details(coinid):
         print(f"Error fetching data: {e}")
         return None  # Or handle the error differently
 
-@app.route('/prices')
+@app.route('/coins')
 def itemlist():
-    items =fetch_prices()
+    items =fetch_coin_prices()
     if items:
-        return render_template('pricelist.html', items=items)
+        return render_template('coins.html', items=items)
     else:
         return render_template('error.html', message="Failed to fetch prices list.")
-
 
 @app.route('/coins/<coinid>')  
 def itemdetails(coinid):
@@ -54,15 +50,11 @@ def itemdetails(coinid):
     else:
         return render_template('error.html', message=f"Failed to fetch details for coin {coinid}.")
 
-
 @app.errorhandler(404)  # Handle 404 errors (page not found)
 def page_not_found(e):
     return render_template('error.html', message="Page not found."), 404
 
 if __name__ == '__main__':
     app.run(debug=True)
-
-
-# assdas 
 
 
