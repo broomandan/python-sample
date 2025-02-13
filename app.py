@@ -1,6 +1,6 @@
 from flask import Flask, render_template
 import requests
-from config import CRYPTO_API_LIST_BASE_URL, CRYPTO_API_DETAIL_BASE_URL
+from config import CRYPTO_API_LIST_BASE_URL, CRYPTO_API_DETAIL_BASE_URL, API_KEY_NAME, API_KEY
 
 app = Flask(__name__)
 
@@ -9,7 +9,8 @@ def fetch_coin_prices(params = {
     'vs_currencies': 'usd'
 }):
     try:
-        response = requests.get(f"{CRYPTO_API_LIST_BASE_URL}")
+        headers = {API_KEY_NAME: API_KEY}
+        response = requests.get(f"{CRYPTO_API_LIST_BASE_URL}", headers=headers)
         response.raise_for_status()  # Raise an exception for bad status codes (4xx or 5xx)
         data = response.json()
         print(data)
@@ -20,11 +21,13 @@ def fetch_coin_prices(params = {
     
     except requests.exceptions.RequestException as error:
         print(f'Error fetching crypto prices: {error}')
+        return None
     
 def fetch_coin_details(coinid):
     try:
+        headers = {API_KEY_NAME: API_KEY}
         print(f"fetch: {CRYPTO_API_DETAIL_BASE_URL}{coinid}")
-        response = requests.get(f"{CRYPTO_API_DETAIL_BASE_URL}{coinid}")
+        response = requests.get(f"{CRYPTO_API_DETAIL_BASE_URL}{coinid}", headers=headers)
         response.raise_for_status()  # Raise an exception for bad status codes (4xx or 5xx)
         return response.json()
     except requests.exceptions.RequestException as e:
@@ -37,7 +40,7 @@ def read_root():
 
 @app.route('/coins')
 def itemlist():
-    items =fetch_coin_prices()
+    items = fetch_coin_prices()
     if items:
         return render_template('coins.html', items=items)
     else:
