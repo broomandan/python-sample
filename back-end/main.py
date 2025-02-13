@@ -2,7 +2,7 @@ import logging
 from logging.handlers import RotatingFileHandler
 from fastapi import FastAPI, HTTPException
 from fastapi.exceptions import RequestValidationError
-from coins_routes import router as api_router
+from routers.coins import router as api_router
 from exception_handlers import (
     not_found,
     http_exception_handler,

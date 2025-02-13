@@ -1,6 +1,5 @@
 from typing import Optional
-from fastapi import APIRouter, HTTPException, Query
-from fastapi.responses import HTMLResponse
+from fastapi import APIRouter,  Query
 from config import CRYPTO_API_LIST_BASE_URL, CRYPTO_API_DETAIL_BASE_URL
 from models.models import CryptoModel, PriceModel
 import requests
