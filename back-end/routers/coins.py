@@ -1,8 +1,9 @@
 from typing import Optional
-from fastapi import APIRouter,  Query
+from fastapi import APIRouter, Query, Depends
 from config import CRYPTO_API_LIST_BASE_URL, CRYPTO_API_DETAIL_BASE_URL
 from models.models import CryptoModel, PriceModel
 import requests
+from security import get_api_key, APIKey
 
 router = APIRouter()
 
@@ -15,6 +16,7 @@ async def get_coin_prices(
     skip: int = Query(0, description="Number of coins to skip"),
     limit: int = Query(10, description="Maximum number of coins to return"),
     name: Optional[str] = Query(None, description="Filter coins by name"),
+    api_key: APIKey = Depends(get_api_key)
 ):
     response = requests.get(f"{CRYPTO_API_LIST_BASE_URL}")
     response.raise_for_status()  # Raise an exception for bad status codes (4xx or 5xx)
@@ -24,9 +26,9 @@ async def get_coin_prices(
         print(f"{crypto}: ${price_info['usd']}") 
 
     return data
+
 @router.get("/coins/{coinid}", response_model=CryptoModel, summary="Get details of a specific coin")
-async def get_coin_details(coinid: str):
-    print(f"{CRYPTO_API_DETAIL_BASE_URL}{coinid}")
+async def get_coin_details(coinid: str,api_key: APIKey = Depends(get_api_key)):
     response = requests.get(f"{CRYPTO_API_DETAIL_BASE_URL}{coinid}")
     response.raise_for_status()  # Raise an exception for bad status codes (4xx or 5xx)
     data = response.json()

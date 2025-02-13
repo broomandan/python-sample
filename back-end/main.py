@@ -1,6 +1,6 @@
 import logging
 from logging.handlers import RotatingFileHandler
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Depends
 from fastapi.exceptions import RequestValidationError
 from routers.coins import router as api_router
 from exception_handlers import (
@@ -9,6 +9,7 @@ from exception_handlers import (
     validation_exception_handler,
     catch_exceptions_middleware,
 )
+from security import get_api_key, APIKey
 
 # Configure logging
 logging.basicConfig(
@@ -33,6 +34,10 @@ api.add_exception_handler(RequestValidationError, validation_exception_handler)
 
 # Register middleware for uncaught exceptions
 api.middleware("http")(catch_exceptions_middleware)
+
+@api.get("/secure-data")
+async def secure_data(api_key: APIKey = Depends(get_api_key)):
+    return {"message": "This is a secure endpoint"}
 
 if __name__ == "__main__":
     import uvicorn
