@@ -44,11 +44,11 @@
 <div class="container">
     
     {% if item %}
-        <h1>{{ item.Name }} Details</h1>
-        <p><b>ID:</b> {{ item.Id }}</p>
-        <p><b>Symbol:</b> {{ item.Symbol }}</p>
-        <p><b>Name:</b> {{ item.Name }}</p>
-        <p><b>Market Cap Rank:</b> {{ item.MarketCapRank }}</p>
+        <h1>{{ item.name }} Details</h1>
+        <p><b>ID:</b> {{ item.id }}</p>
+        <p><b>Symbol:</b> {{ item.symbol }}</p>
+        <p><b>Name:</b> {{ item.name }}</p>
+        <p><b>Market Cap Rank:</b> {{ item.market_cap_rank }}</p>
     {% else %}
         <p>Item details not found.</p>
     {% endif %}

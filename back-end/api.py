@@ -9,10 +9,10 @@ import requests
 api = FastAPI(title="Crypto pricing API using FastAPI", description="Crypto pricing API, returns list of crypto assets, returns detail of an asset")
 
 class CryptoModel(BaseModel):
-     Id : str
-     Symbol: str
-     Name: str 
-     MarketCapRank: int
+     id: str
+     symbol: str
+     name: str 
+     market_cap_rank: int
 
 class CryptoPrice(BaseModel):
     usd: float
@@ -54,13 +54,13 @@ async def get_coin_details(coinid: str):
         response = requests.get(f"{CRYPTO_API_DETAIL_BASE_URL}{coinid}")
         response.raise_for_status()  # Raise an exception for bad status codes (4xx or 5xx)
         data = response.json()
-        crypto_data = {
-            "Id": data["id"],
-            "Symbol": data["symbol"],
-            "Name": data["name"],
-            "MarketCapRank": data["market_cap_rank"]
-        }
-        return CryptoModel(**crypto_data)
+        crypto_instance = CryptoModel(
+        id=data["id"],
+        symbol=data["symbol"],
+        name=data["name"],
+        market_cap_rank=data["market_cap_rank"]
+        )
+        return crypto_instance # CryptoModel(**crypto_data)
     except requests.exceptions.RequestException as e:
         print(f"Error fetching data: {e}")
     
