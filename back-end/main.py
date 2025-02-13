@@ -1,4 +1,5 @@
 import logging
+from logging.handlers import RotatingFileHandler
 from fastapi import FastAPI, HTTPException
 from fastapi.exceptions import RequestValidationError
 from coins_routes import router as api_router
@@ -14,7 +15,8 @@ logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
     handlers=[
-        logging.StreamHandler()
+        logging.StreamHandler(),
+        RotatingFileHandler("api.log", maxBytes=1000000, backupCount=3)  # Add RotatingFileHandler
     ]
 )
 
