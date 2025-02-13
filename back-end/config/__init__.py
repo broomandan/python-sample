@@ -11,4 +11,4 @@ elif env == 'uat':
 elif env == 'production':
     from config.production import *
 else:
-    env = os.getenv('APP_ENV', 'development')
+    raise ValueError(f"Unknown environment: {env}")

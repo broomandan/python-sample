@@ -1,27 +1,12 @@
 from typing import Optional
-from pydantic import BaseModel
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.responses import HTMLResponse
 from config import CRYPTO_API_LIST_BASE_URL, CRYPTO_API_DETAIL_BASE_URL
+from Models.models import CryptoModel, PriceModel
 
 import requests
 
 api = FastAPI(title="Crypto pricing API using FastAPI", description="Crypto pricing API, returns list of crypto assets, returns detail of an asset")
-
-class CryptoModel(BaseModel):
-     id: str
-     symbol: str
-     name: str 
-     market_cap_rank: int
-
-class CryptoPrice(BaseModel):
-    usd: float
-
-class PriceModel(BaseModel):
-    bitcoin: CryptoPrice
-    ethereum: CryptoPrice
-    litecoin: CryptoPrice
-    ripple: CryptoPrice
 
 @api.get("/")
 async def read_root():
@@ -55,22 +40,20 @@ async def get_coin_details(coinid: str):
         response.raise_for_status()  # Raise an exception for bad status codes (4xx or 5xx)
         data = response.json()
         crypto_instance = CryptoModel(
-        id=data["id"],
-        symbol=data["symbol"],
-        name=data["name"],
-        market_cap_rank=data["market_cap_rank"]
+            id=data["id"],
+            symbol=data["symbol"],
+            name=data["name"],
+            market_cap_rank=data["market_cap_rank"]
         )
-        return crypto_instance # CryptoModel(**crypto_data)
+        return crypto_instance
     except requests.exceptions.RequestException as e:
         print(f"Error fetching data: {e}")
     
     raise HTTPException(status_code=404, detail="Item not found")  # Raise 404 if not found
 
-
 @api.exception_handler(404)
 async def not_found(request, exc):
     return HTMLResponse(content="Page not found.", status_code=404)
-
 
 if __name__ == "__main__":
     import uvicorn
